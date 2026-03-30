@@ -1,0 +1,49 @@
+# M200 - Number of Islands
+
+## Difficulty
+Medium
+
+## Category
+Grid, DFS/BFS
+
+## Pattern
+DFS flood fill
+
+## Problem Summary
+LeetCode 200: Number of Islands.
+
+## Approach
+DFS flood fill
+
+## Java Solution
+```java
+public class ProblemM200NumberOfIslands {
+    public int numIslands(char[][] grid) {
+        int answer = 0;
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                if (grid[r][c] == '1') {
+                    answer++;
+                    dfs(grid, r, c);
+                }
+            }
+        }
+        return answer;
+    }
+
+    private void dfs(char[][] grid, int r, int c) {
+        if (r < 0 || c < 0 || r == grid.length || c == grid[0].length || grid[r][c] != '1') {
+            return;
+        }
+        grid[r][c] = '0';
+        dfs(grid, r + 1, c);
+        dfs(grid, r - 1, c);
+        dfs(grid, r, c + 1);
+        dfs(grid, r, c - 1);
+    }
+}
+```
+
+## Complexity
+- Time: O(m*n)
+- Space: O(m*n)
