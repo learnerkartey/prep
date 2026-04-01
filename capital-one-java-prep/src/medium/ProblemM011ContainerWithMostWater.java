@@ -1,14 +1,19 @@
-public class ProblemM011ContainerWithMostWater {
+class Solution {
     public int maxArea(int[] height) {
         int left = 0;
         int right = height.length - 1;
-        int answer = 0;
+        int maxWater = 0;
         while (left < right) {
             int width = right - left;
-            answer = Math.max(answer, Math.min(height[left], height[right]) * width);
-            if (height[left] < height[right]) left++;
-            else right--;
+            int h = Math.min(height[left], height[right]);
+            int area = width * h;
+            maxWater = Math.max(maxWater, area);
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
         }
-        return answer;
+        return maxWater;
     }
 }
