@@ -1,15 +1,17 @@
-public class ProblemE3042CountPrefixAndSuffixPairsI {
+class Solution {
     public int countPrefixSuffixPairs(String[] words) {
-        int answer = 0;
+        int count = 0;
+
         for (int i = 0; i < words.length; i++) {
             for (int j = i + 1; j < words.length; j++) {
-                if (isPrefixAndSuffix(words[i], words[j])) answer++;
+                if (isPrefixAndSuffix(words[i], words[j])) {
+                    count++;
+                }
             }
         }
-        return answer;
+        return count;
     }
-
-    private boolean isPrefixAndSuffix(String small, String large) {
-        return large.startsWith(small) && large.endsWith(small);
+    private boolean isPrefixAndSuffix(String str1, String str2) {
+        return str2.startsWith(str1) && str2.endsWith(str1);
     }
 }
