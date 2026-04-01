@@ -1,22 +1,33 @@
-import java.util.*;
-
-public class ProblemM071SimplifyPath {
+class Solution {
     public String simplifyPath(String path) {
-        Deque<String> stack = new ArrayDeque<>();
-        for (String part : path.split("/")) {
-            if (part.isEmpty() || part.equals(".")) continue;
-            if (part.equals("..")) {
-                if (!stack.isEmpty()) stack.pop();
+      // Use Deque for efficient operations
+        Deque<String> deque = new ArrayDeque<>();
+        
+        // Split the input path by "/" to process each part
+        String[] components = path.split("/");
+        
+        for (String component : components) {
+            if (component.equals("") || component.equals(".")) {
+                // Skip empty parts or current directory
+                continue;
+            } else if (component.equals("..")) {
+                // Go to the parent directory, if possible
+                if (!deque.isEmpty()) {
+                    deque.pollLast();
+                }
             } else {
-                stack.push(part);
+                // Add valid directory name to the deque
+                deque.offerLast(component);
             }
         }
-        if (stack.isEmpty()) return "/";
-        StringBuilder answer = new StringBuilder();
-        Iterator<String> it = stack.descendingIterator();
-        while (it.hasNext()) {
-            answer.append('/').append(it.next());
+        
+        // Build the simplified path from the deque
+        StringBuilder simplifiedPath = new StringBuilder();
+        for (String dir : deque) {
+            simplifiedPath.append("/").append(dir);
         }
-        return answer.toString();
+        
+        // Return root "/" if the deque is empty
+        return simplifiedPath.length() > 0 ? simplifiedPath.toString() : "/";
     }
 }
