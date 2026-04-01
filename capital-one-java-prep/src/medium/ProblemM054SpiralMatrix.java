@@ -1,25 +1,47 @@
-import java.util.*;
-
-public class ProblemM054SpiralMatrix {
+public class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> answer = new ArrayList<>();
-        int top = 0, bottom = matrix.length - 1;
-        int left = 0, right = matrix[0].length - 1;
-
-        while (top <= bottom && left <= right) {
-            for (int c = left; c <= right; c++) answer.add(matrix[top][c]);
-            top++;
-            for (int r = top; r <= bottom; r++) answer.add(matrix[r][right]);
-            right--;
-            if (top <= bottom) {
-                for (int c = right; c >= left; c--) answer.add(matrix[bottom][c]);
-                bottom--;
-            }
-            if (left <= right) {
-                for (int r = bottom; r >= top; r--) answer.add(matrix[r][left]);
-                left++;
-            }
+        
+        List<Integer> res = new ArrayList<Integer>();
+        
+        if (matrix.length == 0) {
+            return res;
         }
-        return answer;
+        
+        int rowBegin = 0;
+        int rowEnd = matrix.length-1;
+        int colBegin = 0;
+        int colEnd = matrix[0].length - 1;
+        
+        while (rowBegin <= rowEnd && colBegin <= colEnd) {
+            // Traverse Right
+            for (int j = colBegin; j <= colEnd; j ++) {
+                res.add(matrix[rowBegin][j]);
+            }
+            rowBegin++;
+            
+            // Traverse Down
+            for (int j = rowBegin; j <= rowEnd; j ++) {
+                res.add(matrix[j][colEnd]);
+            }
+            colEnd--;
+            
+            if (rowBegin <= rowEnd) {
+                // Traverse Left
+                for (int j = colEnd; j >= colBegin; j --) {
+                    res.add(matrix[rowEnd][j]);
+                }
+            }
+            rowEnd--;
+            
+            if (colBegin <= colEnd) {
+                // Traver Up
+                for (int j = rowEnd; j >= rowBegin; j --) {
+                    res.add(matrix[j][colBegin]);
+                }
+            }
+            colBegin ++;
+        }
+        
+        return res;
     }
 }
