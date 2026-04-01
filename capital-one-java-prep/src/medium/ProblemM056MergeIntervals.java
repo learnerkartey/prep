@@ -1,20 +1,24 @@
-import java.util.*;
-
-public class ProblemM056MergeIntervals {
+class Solution {
     public int[][] merge(int[][] intervals) {
-        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        // Sort intervals based on start time
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
         List<int[]> merged = new ArrayList<>();
-        int[] current = intervals[0].clone();
+        int[] prev = intervals[0];
 
         for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0] <= current[1]) {
-                current[1] = Math.max(current[1], intervals[i][1]);
+            // Overlap condition: current start <= previous end
+            if (intervals[i][0] <= prev[1]) {
+                // Merge intervals
+                prev[1] = Math.max(prev[1], intervals[i][1]);
             } else {
-                merged.add(current);
-                current = intervals[i].clone();
+                // No overlap, add previous interval to result
+                merged.add(prev);
+                prev = intervals[i];
             }
         }
-        merged.add(current);
-        return merged.toArray(new int[0][]);
+
+        merged.add(prev); // Add the last interval
+        return merged.toArray(new int[merged.size()][]);
     }
 }
