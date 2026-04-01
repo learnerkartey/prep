@@ -1,16 +1,30 @@
-import java.util.*;
-
-public class ProblemM253MeetingRoomsII {
+class Solution {
     public int minMeetingRooms(int[][] intervals) {
-        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
-        PriorityQueue<Integer> heap = new PriorityQueue<>();
-
-        for (int[] interval : intervals) {
-            if (!heap.isEmpty() && heap.peek() <= interval[0]) {
-                heap.poll();
-            }
-            heap.offer(interval[1]);
+        if (intervals.length == 0) return 0;
+        int n = intervals.length;
+        int[] start = new int[n];
+        int[] end = new int[n]; 
+        for (int i=0; i < n; i++) {
+            start[i] = intervals[i][0];
+            end[i] = intervals[i][1]; 
         }
-        return heap.size();
+        Arrays.sort(start);
+        Arrays.sort(end);
+
+        int startPointer = 0; 
+        int endPointer = 0; 
+        int usedRoom = 0;
+        while (startPointer < n) {
+            if (start[startPointer] >= end[endPointer]) {
+                // Have to allocate new room
+                // No meeting has endd by the time meeting is to start
+                usedRoom--;
+                endPointer++;
+            }
+            usedRoom++; 
+            startPointer++; 
+        }
+        return usedRoom;
     }
+
 }
