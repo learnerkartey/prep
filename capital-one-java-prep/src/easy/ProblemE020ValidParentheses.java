@@ -1,13 +1,22 @@
 import java.util.*;
 
-public class ProblemE020ValidParentheses {
+class Solution {
     public boolean isValid(String s) {
-        Deque<Character> stack = new ArrayDeque<>();
+        Stack<Character> stack = new Stack<>();
         for (char ch : s.toCharArray()) {
-            if (ch == '(') stack.push(')');
-            else if (ch == '{') stack.push('}');
-            else if (ch == '[') stack.push(']');
-            else if (stack.isEmpty() || stack.pop() != ch) return false;
+            if (ch == '(' || ch == '{' || ch == '[') {
+                stack.push(ch);
+            } else {
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                char top = stack.pop();
+                if ((ch == ')' && top != '(') ||
+                    (ch == '}' && top != '{') ||
+                    (ch == ']' && top != '[')) {
+                    return false;
+                }
+            }
         }
         return stack.isEmpty();
     }
