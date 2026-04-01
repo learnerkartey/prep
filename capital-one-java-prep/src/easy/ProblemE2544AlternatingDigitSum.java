@@ -1,12 +1,14 @@
-public class ProblemE2544AlternatingDigitSum {
+class Solution {
     public int alternateDigitSum(int n) {
-        String s = Integer.toString(n);
-        int answer = 0;
+      String num = String.valueOf(n);
+        int sum = 0;
         int sign = 1;
-        for (int i = 0; i < s.length(); i++) {
-            answer += sign * (s.charAt(i) - '0');
+
+        for (int i = 0; i < num.length(); i++) {
+            int digit = num.charAt(i) - '0';
+            sum += sign * digit;
             sign *= -1;
         }
-        return answer;
+        return sum;  
     }
 }
