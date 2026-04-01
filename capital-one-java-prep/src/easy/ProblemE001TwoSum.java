@@ -1,15 +1,29 @@
 import java.util.*;
 
-public class ProblemE001TwoSum {
-    public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> seen = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int need = target - nums[i];
-            if (seen.containsKey(need)) {
-                return new int[] { seen.get(need), i };
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        int carry = 0;
+        
+        while (l1 != null || l2 != null || carry != 0) {
+            int sum = carry;
+
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
             }
-            seen.put(nums[i], i);
+
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+
+            carry = sum / 10;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
         }
-        return new int[0];
+
+        return dummy.next;
     }
 }
