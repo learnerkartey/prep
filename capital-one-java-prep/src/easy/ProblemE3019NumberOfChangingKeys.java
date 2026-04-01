@@ -1,11 +1,15 @@
-public class ProblemE3019NumberOfChangingKeys {
+class Solution {
     public int countKeyChanges(String s) {
-        int answer = 0;
-        for (int i = 1; i < s.length(); i++) {
-            char a = Character.toLowerCase(s.charAt(i - 1));
-            char b = Character.toLowerCase(s.charAt(i));
-            if (a != b) answer++;
+        if(s == null || s.trim().length() == 0) {
+            return 0;
         }
-        return answer;
+        int chatChangeCount = 0;
+        char[] arr = s.toLowerCase().toCharArray();
+        for(int i =0 ;i < arr.length -1 ; i++) {
+            if(arr[i] != arr[i+1]) {
+                chatChangeCount++;
+            }
+        }
+        return chatChangeCount;
     }
 }
