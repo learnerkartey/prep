@@ -1,21 +1,26 @@
-public class ProblemM048RotateImage {
+class Solution {
     public void rotate(int[][] matrix) {
         int n = matrix.length;
-        for (int r = 0; r < n; r++) {
-            for (int c = r + 1; c < n; c++) {
-                int temp = matrix[r][c];
-                matrix[r][c] = matrix[c][r];
-                matrix[c][r] = temp;
+        
+        // Step 1: Transpose the matrix
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
             }
         }
-        for (int[] row : matrix) {
-            int left = 0, right = n - 1;
-            while (left < right) {
-                int temp = row[left];
-                row[left] = row[right];
-                row[right] = temp;
-                left++;
-                right--;
+
+        // Step 2: Reverse each row
+        for (int i = 0; i < n; i++) {
+            int start = 0;
+            int end = n - 1;
+            while (start < end) {
+                int temp = matrix[i][start];
+                matrix[i][start] = matrix[i][end];
+                matrix[i][end] = temp;
+                start++;
+                end--;
             }
         }
     }
