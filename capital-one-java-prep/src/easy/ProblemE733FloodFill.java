@@ -1,19 +1,29 @@
-public class ProblemE733FloodFill {
-    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
-        int original = image[sr][sc];
-        if (original == color) return image;
-        dfs(image, sr, sc, original, color);
+class Solution {
+   public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int originalColor = image[sr][sc];
+
+        if (originalColor == color) {
+            return image;
+        }
+
+        dfs(image, sr, sc, originalColor, color);
         return image;
     }
 
-    private void dfs(int[][] image, int r, int c, int original, int color) {
-        if (r < 0 || c < 0 || r == image.length || c == image[0].length || image[r][c] != original) {
+    private void dfs(int[][] image, int row, int col, int originalColor, int newColor) {
+        if (row < 0 || col < 0 || row >= image.length || col >= image[0].length) {
             return;
         }
-        image[r][c] = color;
-        dfs(image, r + 1, c, original, color);
-        dfs(image, r - 1, c, original, color);
-        dfs(image, r, c + 1, original, color);
-        dfs(image, r, c - 1, original, color);
+
+        if (image[row][col] != originalColor) {
+            return;
+        }
+
+        image[row][col] = newColor;
+
+        dfs(image, row + 1, col, originalColor, newColor);
+        dfs(image, row - 1, col, originalColor, newColor);
+        dfs(image, row, col + 1, originalColor, newColor);
+        dfs(image, row, col - 1, originalColor, newColor);
     }
 }
