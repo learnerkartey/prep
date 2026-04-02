@@ -1,22 +1,27 @@
-import java.util.*;
-
-public class ProblemH332ReconstructItinerary {
+class Solution {
     public List<String> findItinerary(List<List<String>> tickets) {
-        Map<String, PriorityQueue<String>> graph = new HashMap<>();
+      Map<String, PriorityQueue<String>> graph = new HashMap<>();
+
         for (List<String> ticket : tickets) {
-            graph.computeIfAbsent(ticket.get(0), k -> new PriorityQueue<>()).offer(ticket.get(1));
+            String from = ticket.get(0);
+            String to = ticket.get(1);
+            graph.computeIfAbsent(from, k -> new PriorityQueue<>()).offer(to);
         }
 
-        LinkedList<String> route = new LinkedList<>();
-        dfs("JFK", graph, route);
-        return route;
+        LinkedList<String> itinerary = new LinkedList<>();
+        dfs("JFK", graph, itinerary);
+
+        return itinerary;
     }
 
-    private void dfs(String node, Map<String, PriorityQueue<String>> graph, LinkedList<String> route) {
-        PriorityQueue<String> heap = graph.get(node);
-        while (heap != null && !heap.isEmpty()) {
-            dfs(heap.poll(), graph, route);
+    private void dfs(String airport, Map<String, PriorityQueue<String>> graph, LinkedList<String> itinerary) {
+        PriorityQueue<String> nextAirports = graph.get(airport);
+
+        while (nextAirports != null && !nextAirports.isEmpty()) {
+            String next = nextAirports.poll();
+            dfs(next, graph, itinerary);
         }
-        route.addFirst(node);
+
+        itinerary.addFirst(airport);
     }
 }
