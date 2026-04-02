@@ -1,18 +1,15 @@
-import java.util.*;
-
-public class ProblemM435NonOverlappingIntervals {
+class Solution {
     public int eraseOverlapIntervals(int[][] intervals) {
-        Arrays.sort(intervals, Comparator.comparingInt(a -> a[1]));
-        int removed = 0;
-        int end = intervals[0][1];
-
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
+        int count = 0;
+        int prevEnd = intervals[0][1];
         for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0] < end) {
-                removed++;
+            if (intervals[i][0] < prevEnd) {
+                count++;
             } else {
-                end = intervals[i][1];
+                prevEnd = intervals[i][1];
             }
         }
-        return removed;
+        return count;
     }
 }
