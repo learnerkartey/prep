@@ -1,42 +1,51 @@
-import java.util.*;
-
-public class ProblemH2251NumberOfFlowersInFullBloom {
+class Solution {
     public int[] fullBloomFlowers(int[][] flowers, int[] people) {
-        int n = flowers.length;
+         int n = flowers.length;
         int[] starts = new int[n];
         int[] ends = new int[n];
+
         for (int i = 0; i < n; i++) {
             starts[i] = flowers[i][0];
             ends[i] = flowers[i][1];
         }
+
         Arrays.sort(starts);
         Arrays.sort(ends);
 
-        int[] answer = new int[people.length];
+        int[] ans = new int[people.length];
+
         for (int i = 0; i < people.length; i++) {
-            int started = upperBound(starts, people[i]);
-            int ended = lowerBound(ends, people[i]);
-            answer[i] = started - ended;
+            int time = people[i];
+            int started = upperBound(starts, time);
+            int endedBefore = lowerBound(ends, time);
+            ans[i] = started - endedBefore;
         }
-        return answer;
+
+        return ans;
     }
 
-    private int upperBound(int[] nums, int target) {
-        int left = 0, right = nums.length;
+    private int upperBound(int[] arr, int target) {
+        int left = 0, right = arr.length;
         while (left < right) {
-            int mid = (left + right) >>> 1;
-            if (nums[mid] <= target) left = mid + 1;
-            else right = mid;
+            int mid = left + (right - left) / 2;
+            if (arr[mid] <= target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
         }
         return left;
     }
 
-    private int lowerBound(int[] nums, int target) {
-        int left = 0, right = nums.length;
+    private int lowerBound(int[] arr, int target) {
+        int left = 0, right = arr.length;
         while (left < right) {
-            int mid = (left + right) >>> 1;
-            if (nums[mid] < target) left = mid + 1;
-            else right = mid;
+            int mid = left + (right - left) / 2;
+            if (arr[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
         }
         return left;
     }
