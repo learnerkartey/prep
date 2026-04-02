@@ -1,58 +1,95 @@
-import java.util.*;
 
-public class ProblemH3072DistributeElementsIntoTwoArraysII {
-    private static class Fenwick {
+class Solution {
+    static class Fenwick {
         int[] bit;
-        Fenwick(int n) { bit = new int[n + 2]; }
+        int n;
 
-        void add(int index, int delta) {
-            for (int i = index; i < bit.length; i += i & -i) bit[i] += delta;
+        Fenwick(int n) {
+            this.n = n;
+            bit = new int[n + 1];
         }
 
-        int sum(int index) {
-            int answer = 0;
-            for (int i = index; i > 0; i -= i & -i) answer += bit[i];
-            return answer;
+        void update(int i, int delta) {
+            while (i <= n) {
+                bit[i] += delta;
+                i += i & -i;
+            }
+        }
+
+        int query(int i) {
+            int sum = 0;
+            while (i > 0) {
+                sum += bit[i];
+                i -= i & -i;
+            }
+            return sum;
+        }
+
+        int rangeQuery(int l, int r) {
+            return query(r) - query(l - 1);
         }
     }
 
     public int[] resultArray(int[] nums) {
+        int n = nums.length;
+
+        // coordinate compression
         int[] sorted = nums.clone();
         Arrays.sort(sorted);
+
         Map<Integer, Integer> rank = new HashMap<>();
         int idx = 1;
-        for (int value : sorted) {
-            if (!rank.containsKey(value)) rank.put(value, idx++);
-        }
-
-        List<Integer> arr1 = new ArrayList<>();
-        List<Integer> arr2 = new ArrayList<>();
-        Fenwick bit1 = new Fenwick(idx + 2);
-        Fenwick bit2 = new Fenwick(idx + 2);
-
-        arr1.add(nums[0]);
-        bit1.add(rank.get(nums[0]), 1);
-        arr2.add(nums[1]);
-        bit2.add(rank.get(nums[1]), 1);
-
-        for (int i = 2; i < nums.length; i++) {
-            int r = rank.get(nums[i]);
-            int greater1 = arr1.size() - bit1.sum(r);
-            int greater2 = arr2.size() - bit2.sum(r);
-
-            if (greater1 > greater2 || (greater1 == greater2 && arr1.size() <= arr2.size())) {
-                arr1.add(nums[i]);
-                bit1.add(r, 1);
-            } else {
-                arr2.add(nums[i]);
-                bit2.add(r, 1);
+        for (int num : sorted) {
+            if (!rank.containsKey(num)) {
+                rank.put(num, idx++);
             }
         }
 
-        int[] answer = new int[nums.length];
+        ArrayList<Integer> arr1 = new ArrayList<>();
+        ArrayList<Integer> arr2 = new ArrayList<>();
+
+        Fenwick bit1 = new Fenwick(rank.size());
+        Fenwick bit2 = new Fenwick(rank.size());
+
+        arr1.add(nums[0]);
+        arr2.add(nums[1]);
+
+        bit1.update(rank.get(nums[0]), 1);
+        bit2.update(rank.get(nums[1]), 1);
+
+        for (int i = 2; i < n; i++) {
+            int r = rank.get(nums[i]);
+
+            int greater1 = arr1.size() - bit1.query(r); // count > nums[i]
+            int greater2 = arr2.size() - bit2.query(r); // count > nums[i]
+
+            if (greater1 > greater2) {
+                arr1.add(nums[i]);
+                bit1.update(r, 1);
+            } else if (greater1 < greater2) {
+                arr2.add(nums[i]);
+                bit2.update(r, 1);
+            } else {
+                if (arr1.size() <= arr2.size()) {
+                    arr1.add(nums[i]);
+                    bit1.update(r, 1);
+                } else {
+                    arr2.add(nums[i]);
+                    bit2.update(r, 1);
+                }
+            }
+        }
+
+        int[] result = new int[n];
         int k = 0;
-        for (int value : arr1) answer[k++] = value;
-        for (int value : arr2) answer[k++] = value;
-        return answer;
+
+        for (int x : arr1) {
+            result[k++] = x;
+        }
+        for (int x : arr2) {
+            result[k++] = x;
+        }
+
+        return result;
     }
 }
