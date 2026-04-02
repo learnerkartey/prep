@@ -1,12 +1,15 @@
-public class ProblemM3101CountAlternatingSubarrays {
+class Solution {
     public long countAlternatingSubarrays(int[] nums) {
-        long answer = 1;
-        long current = 1;
+        long result = 1;
+        long curr = 1;
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i] != nums[i - 1]) current++;
-            else current = 1;
-            answer += current;
+            if (nums[i] != nums[i - 1]) {
+                curr++;
+            } else {
+                curr = 1;
+            }
+            result += curr;
         }
-        return answer;
+        return result;
     }
 }
