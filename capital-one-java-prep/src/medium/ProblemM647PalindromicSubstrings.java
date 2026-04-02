@@ -1,14 +1,13 @@
-public class ProblemM647PalindromicSubstrings {
+class Solution {
     public int countSubstrings(String s) {
-        int answer = 0;
-        for (int center = 0; center < s.length(); center++) {
-            answer += expand(s, center, center);
-            answer += expand(s, center, center + 1);
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            count += expandAroundCenter(s, i, i);       // odd length
+            count += expandAroundCenter(s, i, i + 1);   // even length
         }
-        return answer;
+        return count;
     }
-
-    private int expand(String s, int left, int right) {
+    private int expandAroundCenter(String s, int left, int right) {
         int count = 0;
         while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
             count++;
