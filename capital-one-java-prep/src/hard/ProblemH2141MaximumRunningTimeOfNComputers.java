@@ -1,23 +1,35 @@
-public class ProblemH2141MaximumRunningTimeOfNComputers {
+class Solution {
     public long maxRunTime(int n, int[] batteries) {
         long total = 0;
-        for (int battery : batteries) total += battery;
-
-        long left = 0;
-        long right = total / n;
-        while (left < right) {
-            long mid = (left + right + 1) / 2;
-            if (canRun(mid, n, batteries)) left = mid;
-            else right = mid - 1;
+        for (int battery : batteries) {
+            total += battery;
         }
-        return left;
+
+        long left = 1;
+        long right = total / n;
+        long answer = 0;
+
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+
+            if (canRun(n, batteries, mid)) {
+                answer = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return answer;
     }
 
-    private boolean canRun(long time, int n, int[] batteries) {
+    private boolean canRun(int n, int[] batteries, long time) {
         long power = 0;
+
         for (int battery : batteries) {
-            power += Math.min((long) battery, time);
+            power += Math.min(battery, time);
         }
-        return power >= time * n;
+
+        return power >= n * time;
     }
 }
