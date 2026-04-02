@@ -1,28 +1,31 @@
-import java.util.*;
-
-public class ProblemM2768NumberOfBlackBlocks {
+class Solution {
     public long[] countBlackBlocks(int m, int n, int[][] coordinates) {
-        Map<Long, Integer> count = new HashMap<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
 
-        for (int[] cell : coordinates) {
-            int r = cell[0];
-            int c = cell[1];
-            for (int nr = r - 1; nr <= r; nr++) {
-                for (int nc = c - 1; nc <= c; nc++) {
-                    if (nr >= 0 && nc >= 0 && nr + 1 < m && nc + 1 < n) {
-                        long key = ((long) nr << 32) | (nc & 0xffffffffL);
-                        count.put(key, count.getOrDefault(key, 0) + 1);
-                    }
-                }
-            }
+        for (int[] xy : coordinates) {
+            int x = xy[0];
+            int y = xy[1];
+
+            if (x + 1 < m && y + 1 < n) addToMap(sb, x, y, map);       // Bottom-right
+            if (x + 1 < m && y - 1 >= 0) addToMap(sb, x, y - 1, map);  // Bottom-left
+            if (x - 1 >= 0 && y + 1 < n) addToMap(sb, x - 1, y, map);  // Top-right
+            if (x - 1 >= 0 && y - 1 >= 0) addToMap(sb, x - 1, y - 1, map); // Top-left
         }
 
-        long[] answer = new long[5];
-        long total = (long) (m - 1) * (n - 1);
-        for (int blacks : count.values()) {
-            answer[blacks]++;
+        long[] res = new long[5];
+        for (int count : map.values()) {
+            res[count]++;
         }
-        answer[0] = total - (answer[1] + answer[2] + answer[3] + answer[4]);
-        return answer;
+
+        res[0] = (long)(m - 1) * (n - 1) - map.size(); // Count of blocks with 0 black cells
+        return res;
+    }
+
+    public void addToMap(StringBuilder sb, int x, int y, HashMap<String, Integer> map) {
+        sb.setLength(0);
+        sb.append(x).append(',').append(y);
+        String key = sb.toString();
+        map.put(key, map.getOrDefault(key, 0) + 1);
     }
 }
