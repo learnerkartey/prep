@@ -1,35 +1,51 @@
-import java.util.*;
-
-public class ProblemH127WordLadder {
+class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        Map<String, List<String>> patterns = new HashMap<>();
-        int wordLen = beginWord.length();
-        for (String word : wordList) {
-            for (int i = 0; i < wordLen; i++) {
-                String pattern = word.substring(0, i) + '*' + word.substring(i + 1);
-                patterns.computeIfAbsent(pattern, k -> new ArrayList<>()).add(word);
-            }
+         Set<String> wordSet = new HashSet<>(wordList);
+
+        if (!wordSet.contains(endWord)) {
+            return 0;
         }
 
-        Queue<String> queue = new ArrayDeque<>();
+        Queue<String> queue = new LinkedList<>();
         queue.offer(beginWord);
+
         Set<String> visited = new HashSet<>();
         visited.add(beginWord);
+
         int steps = 1;
 
         while (!queue.isEmpty()) {
-            for (int size = queue.size(); size > 0; size--) {
-                String word = queue.poll();
-                if (word.equals(endWord)) return steps;
-                for (int i = 0; i < wordLen; i++) {
-                    String pattern = word.substring(0, i) + '*' + word.substring(i + 1);
-                    for (String next : patterns.getOrDefault(pattern, Collections.emptyList())) {
-                        if (visited.add(next)) queue.offer(next);
+            int size = queue.size();
+
+            for (int i = 0; i < size; i++) {
+                String current = queue.poll();
+
+                if (current.equals(endWord)) {
+                    return steps;
+                }
+
+                char[] chars = current.toCharArray();
+
+                for (int j = 0; j < chars.length; j++) {
+                    char original = chars[j];
+
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        chars[j] = c;
+                        String next = new String(chars);
+
+                        if (wordSet.contains(next) && !visited.contains(next)) {
+                            visited.add(next);
+                            queue.offer(next);
+                        }
                     }
+
+                    chars[j] = original;
                 }
             }
+
             steps++;
         }
+
         return 0;
     }
 }
