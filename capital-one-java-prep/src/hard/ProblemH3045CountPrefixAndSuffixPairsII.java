@@ -1,25 +1,36 @@
-import java.util.*;
+class Solution{
 
-public class ProblemH3045CountPrefixAndSuffixPairsII {
-    private static class Node {
-        Map<Integer, Node> next = new HashMap<>();
-        int endCount;
-    }
+public static long countPrefixSuffixPairs(String[] words){
+	long pairCnt = 0;
 
-    public long countPrefixSuffixPairs(String[] words) {
-        Node root = new Node();
-        long answer = 0;
+	class TrieNode{
+		public int cnt;
+		public Map<Pair<Character, Character>, TrieNode> twoChToNext;
+		public TrieNode(){
+			this.cnt = 0;
+			this.twoChToNext = new HashMap<>();
+		}
+	}
 
-        for (String word : words) {
-            Node node = root;
-            int n = word.length();
-            for (int i = 0; i < n; i++) {
-                int key = (word.charAt(i) << 16) | word.charAt(n - 1 - i);
-                node = node.next.computeIfAbsent(key, k -> new Node());
-                answer += node.endCount;
-            }
-            node.endCount++;
-        }
-        return answer;
-    }
+	var root = new TrieNode();
+	for (int wordIdx = words.length - 1; wordIdx >= 0; wordIdx -= 1){
+		String curWord = words[wordIdx];
+
+		TrieNode cur = root;
+		for (int i = 0; i < curWord.length(); i += 1){
+			var leftRightCh = new Pair<>(curWord.charAt(i),
+				curWord.charAt(curWord.length() - 1 - i));
+			if (!cur.twoChToNext.containsKey(leftRightCh)){
+				cur.twoChToNext.put(leftRightCh, new TrieNode());
+			}
+			cur = cur.twoChToNext.get(leftRightCh);
+			cur.cnt += 1;
+		}
+
+		pairCnt += cur.cnt - 1;
+	}
+
+	return pairCnt;
+}
+
 }
