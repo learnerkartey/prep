@@ -1,25 +1,40 @@
-import java.util.*;
-
-public class ProblemM1438LongestContinuousSubarrayWithAbsoluteDiffLessThanOrEqualToLimit {
+class Solution {
     public int longestSubarray(int[] nums, int limit) {
-        Deque<Integer> maxDeque = new ArrayDeque<>();
-        Deque<Integer> minDeque = new ArrayDeque<>();
+        
+        LinkedList<Integer> increase = new LinkedList<>();
+        LinkedList<Integer> decrease = new LinkedList<>();
+
+        int max = 0;
         int left = 0;
-        int answer = 0;
 
-        for (int right = 0; right < nums.length; right++) {
-            while (!maxDeque.isEmpty() && nums[maxDeque.peekLast()] < nums[right]) maxDeque.pollLast();
-            while (!minDeque.isEmpty() && nums[minDeque.peekLast()] > nums[right]) minDeque.pollLast();
-            maxDeque.offerLast(right);
-            minDeque.offerLast(right);
+        for (int i = 0; i < nums.length; i++) {
+            int n = nums[i];
 
-            while (nums[maxDeque.peekFirst()] - nums[minDeque.peekFirst()] > limit) {
-                if (maxDeque.peekFirst() == left) maxDeque.pollFirst();
-                if (minDeque.peekFirst() == left) minDeque.pollFirst();
+            while (increase.size() > 0 && n < increase.getLast()) {
+                increase.removeLast();
+            }
+            increase.add(n);
+
+            while (decrease.size() > 0 && n > decrease.getLast()) {
+                decrease.removeLast();
+            }
+
+            decrease.add(n);
+
+            while (decrease.getFirst() - increase.getFirst() > limit) {
+                if (nums[left] == decrease.getFirst()) {
+                    decrease.removeFirst();
+                }
+                if (nums[left] == increase.getFirst()) {
+                    increase.removeFirst();
+                }
                 left++;
             }
-            answer = Math.max(answer, right - left + 1);
+
+            int size = i - left + 1;
+            max = Math.max(max, size);
         }
-        return answer;
+
+        return max;
     }
 }
