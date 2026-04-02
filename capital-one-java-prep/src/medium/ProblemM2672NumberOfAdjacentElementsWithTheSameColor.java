@@ -1,25 +1,24 @@
-public class ProblemM2672NumberOfAdjacentElementsWithTheSameColor {
-    public int[] colorTheArray(int n, int[][] queries) {
-        int[] colors = new int[n];
-        int[] answer = new int[queries.length];
-        int same = 0;
+class Solution {
+  public int[] colorTheArray(int n, int[][] queries) {
+    var nums = new int[n];
+    var m = queries.length;
+    var ans = new int[m];
+    var cnt = 0;
 
-        for (int i = 0; i < queries.length; i++) {
-            int index = queries[i][0];
-            int color = queries[i][1];
+    for (var i=0; i<m; i++) {
+      var j = queries[i][0];
 
-            if (colors[index] != 0) {
-                if (index > 0 && colors[index] == colors[index - 1]) same--;
-                if (index + 1 < n && colors[index] == colors[index + 1]) same--;
-            }
+      if (nums[j] != 0) {
+        cnt -= j == 0 || nums[j - 1] != nums[j] ? 0 : 1;
+        cnt -= j == n-1 || nums[j + 1] != nums[j] ? 0 : 1;
+      }
+      nums[j] = queries[i][1];
 
-            colors[index] = color;
+      cnt += j == 0 || nums[j - 1] != nums[j] ? 0 : 1;
+      cnt += j == n-1 || nums[j + 1] != nums[j] ? 0 : 1;
 
-            if (index > 0 && colors[index] == colors[index - 1]) same++;
-            if (index + 1 < n && colors[index] == colors[index + 1]) same++;
-
-            answer[i] = same;
-        }
-        return answer;
+      ans[i] = cnt;
     }
+    return ans;
+  }
 }
