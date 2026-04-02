@@ -1,26 +1,27 @@
-import java.util.*;
+class Solution {
+     public int countNicePairs(int[] nums) {
+        int mod = 1_000_000_007;
+        Map<Integer, Integer> map = new HashMap<>();
+        long count = 0;
 
-public class ProblemM1814CountNicePairsInAnArray {
-    private static final int MOD = 1_000_000_007;
-
-    public int countNicePairs(int[] nums) {
-        Map<Integer, Long> freq = new HashMap<>();
-        long answer = 0;
         for (int num : nums) {
-            int key = num - reverse(num);
-            long count = freq.getOrDefault(key, 0L);
-            answer = (answer + count) % MOD;
-            freq.put(key, count + 1);
+            int value = num - reverse(num);
+
+            count = (count + map.getOrDefault(value, 0)) % mod;
+            map.put(value, map.getOrDefault(value, 0) + 1);
         }
-        return (int) answer;
+
+        return (int) count;
     }
 
     private int reverse(int num) {
-        int reversed = 0;
+        int rev = 0;
+
         while (num > 0) {
-            reversed = reversed * 10 + num % 10;
+            rev = rev * 10 + (num % 10);
             num /= 10;
         }
-        return reversed;
+
+        return rev;
     }
 }
