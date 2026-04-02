@@ -1,18 +1,27 @@
-import java.util.*;
-
-public class ProblemM2817MinimumAbsoluteDifferenceBetweenElementsWithConstraint {
-    public int minAbsoluteDifference(List<Integer> nums, int x) {
-        if (x == 0) return 0;
+class Solution {
+     public int minAbsoluteDifference(List<Integer> nums, int x) {
+        int n = nums.size();
+        int minDiff = Integer.MAX_VALUE;
         TreeSet<Integer> set = new TreeSet<>();
-        int answer = Integer.MAX_VALUE;
 
-        for (int i = x; i < nums.size(); i++) {
-            set.add(nums.get(i - x));
-            Integer floor = set.floor(nums.get(i));
-            if (floor != null) answer = Math.min(answer, nums.get(i) - floor);
-            Integer ceil = set.ceiling(nums.get(i));
-            if (ceil != null) answer = Math.min(answer, ceil - nums.get(i));
+        for (int j = x; j < n; j++) {
+            set.add(nums.get(j - x));
+
+            int target = nums.get(j);
+
+            Integer floor = set.floor(target);
+            if (floor != null) {
+                minDiff = Math.min(minDiff, target - floor);
+            }
+
+            Integer ceiling = set.ceiling(target);
+            if (ceiling != null) {
+                minDiff = Math.min(minDiff, ceiling - target);
+            }
+
+            if (minDiff == 0) return 0;
         }
-        return answer;
+
+        return minDiff;
     }
 }
