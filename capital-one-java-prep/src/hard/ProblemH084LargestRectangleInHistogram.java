@@ -1,20 +1,23 @@
-import java.util.*;
+import java.util.Stack;
 
-public class ProblemH084LargestRectangleInHistogram {
+class Solution {
     public int largestRectangleArea(int[] heights) {
-        Deque<Integer> stack = new ArrayDeque<>();
-        int answer = 0;
+        Stack<Integer> stack = new Stack<>();
+        int maxArea = 0;
+        int n = heights.length;
 
-        for (int i = 0; i <= heights.length; i++) {
-            int current = (i == heights.length) ? 0 : heights[i];
-            while (!stack.isEmpty() && heights[stack.peek()] > current) {
+        for (int i = 0; i <= n; i++) {
+            int currentHeight = (i == n) ? 0 : heights[i];
+
+            while (!stack.isEmpty() && heights[stack.peek()] > currentHeight) {
                 int height = heights[stack.pop()];
-                int left = stack.isEmpty() ? -1 : stack.peek();
-                int width = i - left - 1;
-                answer = Math.max(answer, height * width);
+                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+                maxArea = Math.max(maxArea, height * width);
             }
+
             stack.push(i);
         }
-        return answer;
+
+        return maxArea;
     }
 }
